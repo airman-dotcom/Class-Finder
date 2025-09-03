@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-blur: blur(30px);
+      --border-radius: 20px;
+      --border-color: rgba(255, 255, 255, 0.25);
+      --reflection: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.05) 60%, transparent 100%);
+      --highlight: rgba(255, 255, 255, 0.2);
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 20% 30%, #00f 0%, transparent 70%),
+                  radial-gradient(circle at 80% 70%, #f0f 0%, transparent 70%),
+                  radial-gradient(circle at 50% 50%, #0ff 0%, transparent 70%);
+      animation: backgroundAnimation 20s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+
+    @keyframes backgroundAnimation {
+      0% {
+        transform: scale(1) translate(0, 0);
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        transform: scale(1.2) translate(-5%, -5%);
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .reflection::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 180deg at 50% 50%, #00f, #0ff, #0f0, #ff0, #f00, #f0f, #00f);
+      opacity: 0.08;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      transform: rotate(45deg);
+    }
+
+    .portfolio-card {
+      width: 90%;
+      max-width: 1000px;
+      padding: 2rem;
+      margin: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      padding: 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: -30%;
+      width: 160%;
+      height: 160%;
+      background: var(--reflection);
+      transform: rotate(25deg);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="glass reflection portfolio-card">
+    <h1 id="output"></h1>
+  </div>
+</body>
+<script>
+let output = document.getElementById("output")
+let now = new Date();
+let day = now.getDate();
+let classes = [null, ["MAT021B"], ["CHE002A", "ANT002", "BIM001", "MAT021B"], ["BIM001", "MAT021B", "CHE002A"],["CHE002A", "ANT002", "CHE002A","ANT002"],["MAT021B"],null]
+let times = [null, [["18:10","19:00"]],[["9:00","10:20"],["12:10","13:30"], ["14:10","15:00"],["17:10","18:00"]], [["12:10","15:00"],["18:10","19:00"],["19:10","20:00"]] ,[["9:00","10:20"], ["12:10","13:30"],["16:10","19:00"],["19:10","20:00"]],[["18:10","19:00"]]]
+let rooms = [null, ["Khaira 123"], ["California 1100", "California 1100", "Cruess 1002", "Olson 205"], ["Surge 2323", "Khaira 123", "Wellman 107"], ["California 1100", "California 1100", "Katherine 1075", "Olson 159"], ["Khaira 123"], null];
+
+const db = {
+	"Wellman 107": "https://maps.app.goo.gl/CbYHHsoCKNJLFSiN7",
+    "Khaira 123": "https://maps.app.goo.gl/SoSHq9vwDrie1kKZ6",
+    "California 1100": "https://maps.app.goo.gl/pyzZiC2qCacq4TAX8",
+    "Cruess 1002": "https://maps.app.goo.gl/8ghQUHrPrgSBg2ry5",
+    "Olson 205": "https://maps.app.goo.gl/WwVwTdzPZ1pFci867",
+    "Surge 2323": "https://maps.app.goo.gl/GAWKvHxgFHPztmrX7",
+    "Katherine 1075": "https://maps.app.goo.gl/F38SBUMhahG5ivSb7",
+    "Olson 159": "https://maps.app.goo.gl/WwVwTdzPZ1pFci867",
+}
+
+function dec(t){
+	let hr = t.split(":")[0];
+    let min = t.split(":")[1];
+    return parseInt(hr) + (parseInt(min)/60);
+}
+
+function t(x,arr){
+	for(let i = 0;i<arr.length;i++){
+    	let use = arr[i]
+        let begin = dec(use[0]);
+        let end = dec(use[1]);
+       	if (x >= begin){
+        	if (x < end){
+            	output.innerHTML = "Current Class: " + classes[day][i] + " in " + rooms[day][i] + "\n" + "From: " +  use[0] + " to " + use[1] + " <a href=" + db[rooms[day][i]] + "><div style='cursor: pointer;color:white;' class='glass reflection project-card' >Directions</div></a>"; 
+                return;
+            } else {
+            	if (i == arr.length-1){
+                	output.innerHTML = "All done with classes today!";
+                    return;
+                }
+            }
+        } else {
+        	output.innerHTML = "Next Class: " + classes[day][i] + " in " + rooms[day][i] + "\n" + "Starts at: " + use[0] + " <a href=" + db[rooms[day][i]] + "><div style='cursor: pointer;color:white;' class='glass reflection project-card' >Directions</div></a>";
+            return
+        }
+    }
+}
+
+if (day == 0 || day == 6){
+	output.innerHTML = "No Classes Today!"
+} else {
+	let l = dec(`${now.getHours()}:${now.getMinutes()}`);
+	t(l,times[day])
+}
+</script>
+</html>
